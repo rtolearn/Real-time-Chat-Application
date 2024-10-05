@@ -1,5 +1,14 @@
+
+<script setup>
+import Navigation from './components/Navigation/page.vue'
+import Introduction from './components/Introduction/page.vue'
+import ChatRoom from './components/ChatRoom/page.vue'
+</script>
+
 <template>
-  <h1 class="text-3xl underline">Hello world!</h1>
+
+  <Navigation />
+  <Introduction />
+  <ChatRoom />
 </template>
 
-<script setup></script>
