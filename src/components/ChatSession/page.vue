@@ -7,9 +7,11 @@
     <!-- Toggle Button -->
     <div class="w-4/5 card flex justify-between items-center gap-2 px-2 my-5">
       <RouterLink to="/">
-        <div class="flex justify-center items-center gap-2">
+        <div class="flex justify-center items-center gap-2 
+          bg-red-500
+          border border-red-300 p-2">
           <i class="pi pi-sign-out"></i>
-          <h1>Back</h1>
+          <h1>Leave</h1>
         </div>
       </RouterLink>
 

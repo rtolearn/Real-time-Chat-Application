@@ -3,13 +3,12 @@
 import Navigation from "../Navigation/page.vue";
 import Introduction from "../Introduction/page.vue";
 import ChatRoom from "../ChatRoom/page.vue";
-import ChatSession from "../ChatSession/page.vue";
+// import ChatSession from "../ChatSession/page.vue";
 </script>
 
 <template>
   <Navigation />
   <Introduction />
   <ChatRoom />
-  <Navigation />
-  <ChatSession />
+
 </template>
