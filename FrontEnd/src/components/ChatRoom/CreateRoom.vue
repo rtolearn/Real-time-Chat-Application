@@ -75,7 +75,6 @@
                 @keydown.enter.prevent="addTag"
                 class="w-full h-auto my-2"
               />
-
             </div>
 
             <!-- Display the list of tags -->
@@ -163,16 +162,15 @@ const chatRoomDetails = ref({
   title: "",
   host: "",
   maxMember: 0,
-  tags: []
+  tags: [],
 });
 
 const chatRoomDetailsError = ref({
   titleError: false,
   hostError: false,
   maxMemberError: false,
-  tagsError: false
+  tagsError: false,
 });
-
 
 // Function to add a tag to the list
 const addTag = () => {
