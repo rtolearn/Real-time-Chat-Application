@@ -10,5 +10,6 @@ import ChatRoom from "../ChatRoom/page.vue";
   <Navigation />
   <Introduction />
   <ChatRoom />
-
 </template>
+
+

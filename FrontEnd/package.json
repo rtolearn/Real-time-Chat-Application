@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-   "serve": "serve -s dist",
+    "serve": "serve -s dist",
     "build": "vite build",
     "preview": "vite preview",
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs --fix --ignore-path .gitignore"
@@ -14,6 +14,7 @@
     "@primevue/themes": "^4.0.7",
     "primeicons": "^7.0.0",
     "primevue": "^4.0.7",
+    "socket.io-client": "^4.8.0",
     "vue": "^3.4.29",
     "vue-router": "^4.4.5"
   },
