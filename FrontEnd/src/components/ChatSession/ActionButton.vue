@@ -4,6 +4,7 @@
     <RouterLink to="/">
       <div
         class="flex justify-center items-center gap-2 bg-red-500 border border-red-300 p-2 rounded-lg"
+        @click="handleDisconnection"
       >
         <i class="pi pi-sign-out"></i>
         <h1>Leave</h1>
@@ -14,20 +15,39 @@
       <InputText 
       v-model="inputName" 
       id="username" 
-      @keyup.enter="emitUserName" 
-      :placeholder="inputName ? inputName: 'Anonymous'"
+      @keyup.stop="emitUserName" 
+      :placeholder="props.userName"
       class="text-center"/>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import InputText from "primevue/inputtext";
-const emit = defineEmits(["userName"]);
+import { io } from "socket.io-client";
+
 const inputName = ref("");
 
+//Define emits
+const emit = defineEmits(["editedUserName"]);
 const emitUserName = () => {
-  emit("userName", inputName.value);
+  emit("editedUserName", inputName.value ? inputName.value:props.userName);
 };
+//Define props
+const props = defineProps({
+  userName:{
+    type: String,
+    required: true,
+  }
+})
+let socket;
+onMounted(()=>{
+   socket = io('http://localhost:3000');
+})
+ 
+//Function to handle disconnection, once the user click the "leave" button
+const handleDisconnection = () =>{
+  socket.disconnect();
+}
 </script>

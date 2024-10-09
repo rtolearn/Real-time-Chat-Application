@@ -3,17 +3,25 @@
   <div
     class="w-4/5 min-h-[25rem] h-auto flex flex-col mx-auto my-5 p-5 border solid border-black rounded-lg"
   >
-    <CreateRoom />
+    <CreateRoom 
+    @roomInformation="handleRoomInformation"
+    />
     <!-- Display all the chat room -->
-    <Room />
+    <Room 
+    :roomDisplayDetails ="createdRoomInformation"/>
   </div>
 </template>
 
 <script setup>
+import { ref } from "vue";
 import Room from "./Room.vue";
 import CreateRoom from './CreateRoom.vue'
 
+const createdRoomInformation = ref()
 
+function handleRoomInformation(roomObj){
+  createdRoomInformation.value = roomObj 
+}
 
 </script>
 

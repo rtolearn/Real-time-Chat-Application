@@ -19,20 +19,30 @@ const PORT = 3000;
 io.on("connection", (socket) => {
   //Display the user id
   console.log("a user connected: " + socket.id);
-  // Broadcast a message to all clients when a new user connects
-  socket.broadcast.emit("user connected", { id: socket.id });
 
+  //Send the user Id to the client side, so that the other users will be informed of his/her joinning
+  socket.broadcast.emit("Connected user", socket.id);
+
+  //Send the message
   socket.on("chat message", (msg) => {
     console.log("message: " + msg);
-    socket.broadcast.emit("chat message", msg)
+    socket.broadcast.emit("chat message", msg);
   });
-  
-  // Handle disconnection
-  socket.on("disconnect", () => {
+
+  //Send the typing status
+  socket.on("typing", (name) => {
+    console.log(name + " is typing");
+    socket.broadcast.emit("typing", name);
+  });
+
+  // // Handle disconnection
+  socket.on("disconnecting", () => {
     console.log("user disconnected: " + socket.id);
     // Broadcast to all clients that a user has disconnected
-    socket.broadcast.emit("user disconnected", { id: socket.id });
+    socket.broadcast.emit("Disconnected user",socket.id );
   });
+
+  //socket.disconnect(false);
 });
 
 server.listen(PORT, () => {

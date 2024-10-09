@@ -19,16 +19,16 @@
         <form class="w-full" @submit="verifyInput">
           <div class="my-2">
             <label class="block text-md md:text-lg font-semibold my-2"
-              >Title:</label
+              >Room:</label
             >
             <InputText
-              v-model="chatRoomDetails.title"
-              placeholder="Title of chat room"
+              v-model="chatRoomDetails.roomName"
+              placeholder="Room's name"
               aria-label="username"
-              :invalid="chatRoomDetailsError.titleError"
+              :invalid="chatRoomDetailsError.roomNameError"
               class="w-full h-auto my-2"
             />
-            <Message v-if="chatRoomDetailsError.titleError" severity="error"
+            <Message v-if="chatRoomDetailsError.roomNameError" severity="error"
               >Required</Message
             >
           </div>
@@ -38,7 +38,7 @@
             >
             <InputText
               v-model="chatRoomDetails.host"
-              placeholder="Username"
+              placeholder="Host's name"
               aria-label="username"
               :invalid="chatRoomDetailsError.hostError"
               class="w-full h-auto my-2"
@@ -62,40 +62,6 @@
             >
           </div>
 
-          <!-- Tags input field -->
-          <div class="my-2">
-            <label class="block text-md md:text-lg font-semibold my-2"
-              >Tags:</label
-            >
-            <div class="flex flex-wrap items-center gap-2 mb-3">
-              <!-- Input field for adding tags -->
-              <InputText
-                v-model="newTag"
-                placeholder="Add a tag"
-                @keydown.enter.prevent="addTag"
-                class="w-full h-auto my-2"
-              />
-            </div>
-
-            <!-- Display the list of tags -->
-            <div v-if="chatRoomDetails.tags.length">
-              <ul class="flex flex-wrap gap-2">
-                <li
-                  v-for="(tag, index) in chatRoomDetails.tags"
-                  :key="index"
-                  class="bg-gray-100 p-2 rounded-md flex items-center"
-                >
-                  <span>{{ tag }}</span>
-                  <Button
-                    icon="pi pi-times"
-                    class="ml-2"
-                    @click="removeTag(index)"
-                  />
-                </li>
-              </ul>
-            </div>
-          </div>
-
           <div class="flex justify-end">
             <Button type="submit" label="Create" class="w-full h-auto mt-10" />
           </div>
@@ -103,7 +69,7 @@
       </Dialog>
     </div>
 
-    <IconField>
+    <IconField class="flex grow">
       <InputIcon class="pi pi-search" />
       <InputText
         type="text"
@@ -123,9 +89,11 @@ import Dialog from "primevue/dialog";
 import InputIcon from "primevue/inputicon";
 import Message from "primevue/message";
 import { ref } from "vue";
+// import { rollupVersion } from "vite";
+
+
 const visible = ref(false);
 const value = ref(null);
-
 const verifyInput = (e) => {
   e.preventDefault();
   // alert("enter the verification")
@@ -154,35 +122,37 @@ const verifyInput = (e) => {
   }
 };
 
+
+
+// Function to generate random room code
+const generateRoomCode = () => {
+  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  let roomCode = '#';
+  for (let i = 0; i < 8; i++) { // Adjust the length as needed
+    roomCode += chars.charAt(Math.floor(Math.random() * chars.length));
+  }
+  return roomCode;
+};
+//Define Emit
+const emit = defineEmits(['roomInformation'])
 const submitData = () => {
+  //Emit
   alert(JSON.stringify(chatRoomDetails.value));
+  chatRoomDetails.value.roomCode = generateRoomCode();
+  emit('roomInformation',chatRoomDetails)
 };
 
 const chatRoomDetails = ref({
-  title: "",
+  roomName: "",
+  roomCode: "1",
   host: "",
   maxMember: 0,
-  tags: [],
+  
 });
 
 const chatRoomDetailsError = ref({
-  titleError: false,
+  roomNameError: false,
   hostError: false,
   maxMemberError: false,
-  tagsError: false,
 });
-
-// Function to add a tag to the list
-const addTag = () => {
-  if (newTag.value.trim() !== "") {
-    chatRoomDetails.value.tags.push(newTag.value.trim());
-    newTag.value = ""; // Clear input after adding tag
-  }
-};
-// Temporary variable to store new tag
-const newTag = ref("");
-// Function to remove a tag from the list
-const removeTag = (index) => {
-  chatRoomDetails.value.tags.splice(index, 1);
-};
 </script>

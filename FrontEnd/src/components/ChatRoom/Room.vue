@@ -8,10 +8,10 @@
     <div>
       <div>
         <div class="flex justify-between items-center">
-          <div class="flex items-center gap-2">
-            <h1 class="text-base md:text-lg">Title:</h1>
-            <p class="text-xs md:text-sm text-gray-500">{{ item.title }}</p>
-          </div>
+          <div class="flex justify-start items-center gap-2">
+          <h2 class="text-sm md:text-base">Room Name:</h2>
+          <p class="text-xs md:text-sm text-gray-500">{{ item.roomName }}</p>
+        </div>
 
           <div class="flex items-center gap-2">
             <h1 class="text-base md:text-lg">Member:</h1>
@@ -21,6 +21,12 @@
           </div>
         </div>
 
+      
+
+        <div class="flex justify-start items-center gap-2">
+          <h2 class="text-sm md:text-base">Room Code:</h2>
+          <p class="text-xs md:text-sm text-gray-500">{{ item.roomCode }}</p>
+        </div>
         <div class="flex justify-start items-center gap-2">
           <h2 class="text-sm md:text-base">Host:</h2>
           <p class="text-xs md:text-sm text-gray-500">{{ item.host }}</p>
@@ -32,14 +38,7 @@
         </div>
 
         <!-- Tags of room and button -->
-        <div class="flex justify-between items-center my-4">
-          <div
-            v-for="(tag, index) in item.tags"
-            :key="index"
-            class="w-fit h-auto flex flex-wrap justify-start items-center gap-2 w-3/5"
-          >
-            <p class="border solid border-gray-400 p-2 rounded-lg">{{ tag }}</p>
-          </div>
+        <div class="flex justify-end items-center my-4">
           <div class="flex justify-end">
             <RouterLink to="/ChatSession">
               <Button
@@ -56,37 +55,45 @@
     </div>
   </div>
 </template>
-
 <script setup>
 import Button from "primevue/button";
+import { ref, onMounted } from "vue";
 
-const rooms = [
+// Define props at the top level
+const props = defineProps({
+  roomDisplayDetails: {
+    type: Object,
+    required: true,
+  },
+});
+
+// Initialize rooms with some predefined data
+const rooms = ref([
   {
+    roomName: "Geography",
+    roomCode: "#He4d03",
     title: "Environment",
     host: "Ng Chen Yang",
     maxMember: "4",
-    tags: ["tag 1", "tag 2", "tag 3"],
   },
   {
+    roomName: "Arceology",
+    roomCode: "#He4d03",
     title: "Land",
-    host: "Ng Ah beng ",
+    host: "Ng Ah beng",
     maxMember: "5",
-    tags: ["tag 1", "tag 2", "tag 3"],
   },
   {
+    roomName: "Marine",
+    roomCode: "#He4d03",
     title: "Sea",
     host: "Tna beh yi",
     maxMember: "3",
-    tags: ["tag 1", "tag 2", "tag 3"],
   },
-  {
-    title: "Environment",
-    host: "jacky",
-    maxMember: "2",
-    tags: ["tag 1", "tag 2", "tag 3"],
-  },
-];
+]);
 
-
-
+// Use onMounted to push new room details if needed
+onMounted(() => {
+  rooms.value.push(props.roomDisplayDetails);
+});
 </script>
