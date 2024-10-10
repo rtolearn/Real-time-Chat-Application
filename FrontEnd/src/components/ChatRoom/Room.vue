@@ -1,7 +1,7 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <template>
   <div
-    v-for="(item, index) in rooms"
+    v-for="(item, index) in props.roomDisplayDetails"
     :key="index"
     class="w-full h-auto border solid border-blue-200 rounded-md p-5 my-2"
   >
@@ -57,43 +57,17 @@
 </template>
 <script setup>
 import Button from "primevue/button";
-import { ref} from "vue";
+import { onMounted } from "vue";
 
 // Define props at the top level
-// const props = defineProps({
-//   roomDisplayDetails: {
-//     type: Object,
-//     required: true,
-//   },
-// });
+const props = defineProps({
+  roomDisplayDetails: {
+    type: Array,
+    required: true,
+  },
+});
+onMounted(()=>{
+  console.log(props.roomDisplayDetails)
+})
 
-// Initialize rooms with some predefined data
-const rooms = ref([
-  {
-    roomName: "Geography",
-    roomCode: "#He4d03",
-    title: "Environment",
-    host: "Ng Chen Yang",
-    maxMember: "4",
-  },
-  {
-    roomName: "Arceology",
-    roomCode: "#He4d03",
-    title: "Land",
-    host: "Ng Ah beng",
-    maxMember: "5",
-  },
-  {
-    roomName: "Marine",
-    roomCode: "#He4d03",
-    title: "Sea",
-    host: "Tna beh yi",
-    maxMember: "3",
-  },
-]);
-
-// Use onMounted to push new room details if needed
-// onMounted(() => {
-//   rooms.value.push(props.roomDisplayDetails);
-// });
 </script>

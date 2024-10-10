@@ -115,7 +115,7 @@ const verifyInput = (e) => {
   }
 
   if (validInputs.value) {
-    visible.value = false;
+    
     submitData();
   } else {
     return;
@@ -136,10 +136,14 @@ const generateRoomCode = () => {
 //Define Emit
 const emit = defineEmits(['roomInformation'])
 const submitData = () => {
+
   //Emit
   alert(JSON.stringify(chatRoomDetails.value));
   chatRoomDetails.value.roomCode = generateRoomCode();
-  emit('roomInformation',chatRoomDetails)
+  console.log(chatRoomDetails.value)
+  emit('roomInformation', chatRoomDetails.value)
+  visible.value = false;
+  resetForm();
 };
 
 const chatRoomDetails = ref({
@@ -155,4 +159,19 @@ const chatRoomDetailsError = ref({
   hostError: false,
   maxMemberError: false,
 });
+// Reset Form
+const resetForm = () => {
+  chatRoomDetails.value = {
+    roomName: "",
+    roomCode: "",
+    host: "",
+    maxMember: 0,
+  };
+
+  chatRoomDetailsError.value = {
+    roomNameError: false,
+    hostError: false,
+    maxMemberError: false,
+  };
+};
 </script>
