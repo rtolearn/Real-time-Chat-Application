@@ -11,7 +11,7 @@
           <div class="flex justify-start items-center gap-2">
           <h2 class="text-sm md:text-base">Room Name:</h2>
           <p class="text-xs md:text-sm text-gray-500">{{ item.roomName }}</p>
-        </div>
+        </div> 
 
           <div class="flex items-center gap-2">
             <h1 class="text-base md:text-lg">Member:</h1>
@@ -57,15 +57,15 @@
 </template>
 <script setup>
 import Button from "primevue/button";
-import { ref, onMounted } from "vue";
+import { ref} from "vue";
 
 // Define props at the top level
-const props = defineProps({
-  roomDisplayDetails: {
-    type: Object,
-    required: true,
-  },
-});
+// const props = defineProps({
+//   roomDisplayDetails: {
+//     type: Object,
+//     required: true,
+//   },
+// });
 
 // Initialize rooms with some predefined data
 const rooms = ref([
@@ -93,7 +93,7 @@ const rooms = ref([
 ]);
 
 // Use onMounted to push new room details if needed
-onMounted(() => {
-  rooms.value.push(props.roomDisplayDetails);
-});
+// onMounted(() => {
+//   rooms.value.push(props.roomDisplayDetails);
+// });
 </script>

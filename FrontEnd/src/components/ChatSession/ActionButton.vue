@@ -48,6 +48,9 @@ onMounted(()=>{
  
 //Function to handle disconnection, once the user click the "leave" button
 const handleDisconnection = () =>{
+  // Emit 'user leaving' event with the userName before disconnecting
+  socket.emit("user leaving", props.userName);
+  // Disconnect the socket after emitting the event
   socket.disconnect();
 }
 </script>

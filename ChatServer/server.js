@@ -7,12 +7,12 @@ const app = express();
 const server = createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: "http://localhost:5173", // Allow your frontend's origin
-    methods: ["GET", "POST"], // Allowed methods
+    origin: "http://localhost:5173", 
+    methods: ["GET", "POST"], 
   },
 });
 // Enable CORS for all routes
-app.use(cors()); // This will allow all origins by default
+app.use(cors());
 
 const PORT = 3000;
 
@@ -20,8 +20,12 @@ io.on("connection", (socket) => {
   //Display the user id
   console.log("a user connected: " + socket.id);
 
-  //Send the user Id to the client side, so that the other users will be informed of his/her joinning
-  socket.broadcast.emit("Connected user", socket.id);
+  //Joinning Message
+  socket.on("joinning message", (userName)=>{
+    console.log(userName  + "has joined the chat room")
+    io.emit("joinning message", userName)
+  })
+  // socket.broadcast.emit("Connected user", socket.id);
 
   //Send the message
   socket.on("chat message", (msg) => {
@@ -35,14 +39,17 @@ io.on("connection", (socket) => {
     socket.broadcast.emit("typing", name);
   });
 
-  // // Handle disconnection
-  socket.on("disconnecting", () => {
-    console.log("user disconnected: " + socket.id);
-    // Broadcast to all clients that a user has disconnected
-    socket.broadcast.emit("Disconnected user",socket.id );
+  // Custom event when a user leaves
+  socket.on("user leaving", (userName) => {
+    console.log(userName + " is leaving the chat");
+    // Broadcast the name of the user leaving
+    socket.broadcast.emit("user leaving", `${userName} has left the chat room.`);
   });
 
-  //socket.disconnect(false);
+   // Handle disconnection (just in case if user closes browser without clicking 'leave')
+   socket.on("disconnect", () => {
+    console.log("user disconnected: " + socket.id);
+  });
 });
 
 server.listen(PORT, () => {

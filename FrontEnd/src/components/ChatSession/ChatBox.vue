@@ -27,7 +27,6 @@
         </div>
         <!-- Display the information once a new user has joined the chat room -->
         <div v-else class="mx-auto italic">
-          <!-- <div v-if="message.sender === 'Connected'"></div> -->
           <p>{{ message.text }}</p>
         </div>
       </div>
@@ -114,24 +113,26 @@ onMounted(() => {
     }
   });
 
-  socket.on("Connected user", (userId) => {
-    userIdName.value = userId;
+  socket.on("joinning message", (usersName) => {
+    console.log(usersName + "passed from the server")
+    userIdName.value = usersName;
     // Also push into display message, but then the sender name put it as something else
     displayMessages.value.push({
-      text: `${userId} has joined this chatroom...`,
+      text: `${usersName} has joined this chatroom...`,
       sender: "Connected",
     });
   });
 
-  socket.on("Disconnected user", (userId) => {
-    userIdDisconnected.value = userId;
+  socket.on("user leaving", (userName) => {
+    userIdDisconnected.value = userName;
     displayMessages.value.push({
-      text: `${userId} has disconnected from this chatroom...`,
+      text: `${userName} has disconnected from this chatroom...`,
       sender: "Disconnected",
     });
-
-    console.log(displayMessages.value)
   });
+
+
+
 });
 
 // Funtion used to send message to the server

@@ -34,29 +34,32 @@
 </template>
 
 <script setup>
-import { ref} from "vue";
+import { ref, onMounted} from "vue";
 import Dialog from "primevue/dialog";
 import InputText from "primevue/inputtext";
 import Button from "primevue/button";
 import router from "@/router";
  import { io } from "socket.io-client";
- io("http://localhost:3000")
+
 //Variable for the modal dialog
 const visible = ref(true);
 const inputValue = ref("");
 //Define emits
 const emit = defineEmits("userName");
-// let socket;
-// onMounted(()=>{
-// socket = io('http://localhost:3000')
-// })
+let socket;
+onMounted(()=>{
+socket = io('http://localhost:3000')
+})
 
 
 function handleConfirmButton() {
   if (inputValue.value === "") {
     alert("Please enter username.");
   } else {
+    //Emit to the parent component
     emit("userName", inputValue.value);
+    //Emit to the server
+    socket.emit("joinning message", inputValue.value)
     visible.value = false;
   }
 }
