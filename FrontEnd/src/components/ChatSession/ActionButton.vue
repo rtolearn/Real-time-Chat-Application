@@ -23,9 +23,8 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, inject} from "vue";
 import InputText from "primevue/inputtext";
-import { io } from "socket.io-client";
 
 const inputName = ref("");
 
@@ -41,11 +40,8 @@ const props = defineProps({
     required: true,
   }
 })
-let socket;
-onMounted(()=>{
-   socket = io('http://localhost:3000');
-})
- 
+const socket = inject('socket')
+
 //Function to handle disconnection, once the user click the "leave" button
 const handleDisconnection = () =>{
   // Emit 'user leaving' event with the userName before disconnecting

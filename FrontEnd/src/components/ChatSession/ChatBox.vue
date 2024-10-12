@@ -60,11 +60,11 @@
 </template>
 
 <script setup>
-import { ref, nextTick, onMounted } from "vue";
+import { ref, nextTick, onMounted, inject } from "vue";
 import InputText from "primevue/inputtext";
 import IconField from "primevue/iconfield";
 import InputIcon from "primevue/inputicon";
-import { io } from "socket.io-client";
+// import { io } from "socket.io-client";
 //Define props
 const props = defineProps({
   userName: {
@@ -83,56 +83,55 @@ const formatDateTime = (date) => {
 };
 
 // Variable
-let socket;
+const socket = inject("socket");
 const inputValue = ref("");
 const displayMessages = ref([]);
 const typistName = ref("");
 const userIdName = ref("");
 const userIdDisconnected = ref("");
 onMounted(() => {
-  // Connect to the chat server
-  socket = io("http://localhost:3000"); // Adjust the URL based on your server's location
-
-  // Listen for incoming messages from the server
-  socket.on("chat message", (msg) => {
-    console.log("Message received:", msg);
-    //Change the "sender" so that
-    msg.sender = "received";
-    displayMessages.value.push(msg); // Push received message
-    console.log(displayMessages.value);
-    nextTick(() => {
-      scrollToBottom();
+  if (socket) {
+    // Listen for incoming messages from the server
+    socket.on("chat message", (msg) => {
+      console.log("Message received:", msg);
+      //Change the "sender" so that
+      msg.sender = "received";
+      displayMessages.value.push(msg); // Push received message
+      console.log(displayMessages.value);
+      nextTick(() => {
+        scrollToBottom();
+      });
     });
-  });
 
-  socket.on("typing", (name) => {
-    if (name) {
-      typistName.value = name;
-    } else {
-      typistName.value = "";
-    }
-  });
-
-  socket.on("joinning message", (usersName) => {
-    console.log(usersName + "passed from the server")
-    userIdName.value = usersName;
-    // Also push into display message, but then the sender name put it as something else
-    displayMessages.value.push({
-      text: `${usersName} has joined this chatroom...`,
-      sender: "Connected",
+    socket.on("typing", (name) => {
+      if (name) {
+        typistName.value = name;
+      } else {
+        typistName.value = "";
+      }
     });
-  });
 
-  socket.on("user leaving", (userName) => {
-    userIdDisconnected.value = userName;
-    displayMessages.value.push({
-      text: `${userName} has disconnected from this chatroom...`,
-      sender: "Disconnected",
+    socket.on("joinning message", (usersName) => {
+      console.log(usersName + "passed from the server");
+      userIdName.value = usersName;
+      // Also push into display message, but then the sender name put it as something else
+      displayMessages.value.push({
+        text: `${usersName} has joined this chatroom...`,
+        sender: "Connected",
+      });
     });
-  });
 
-
-
+    socket.on("user leaving", (userName) => {
+      userIdDisconnected.value = userName;
+      displayMessages.value.push({
+        text: `${userName}`,
+        sender: "Disconnected",
+      });
+      
+    });
+  } else {
+    alert(socket);
+  }
 });
 
 // Funtion used to send message to the server

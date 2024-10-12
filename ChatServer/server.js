@@ -17,8 +17,16 @@ app.use(cors());
 const PORT = 3000;
 
 io.on("connection", (socket) => {
+
+  // If you want to disconnect all users
+  // io.sockets.sockets.forEach((s) => {
+  //   s.disconnect(true);
+  // });
+
   //Display the user id
   console.log("a user connected: " + socket.id);
+  // Showing the number of total user in the chat room
+  io.emit("total users", io.engine.clientsCount)
 
   //Joinning Message
   socket.on("joinning message", (userName)=>{
@@ -48,7 +56,8 @@ io.on("connection", (socket) => {
 
    // Handle disconnection (just in case if user closes browser without clicking 'leave')
    socket.on("disconnect", () => {
-    console.log("user disconnected: " + socket.id);
+    // console.log("user disconnected: " + socket.id);
+    socket.broadcast.emit('total users', io.engine.clientsCount);
   });
 });
 

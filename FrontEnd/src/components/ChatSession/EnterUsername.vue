@@ -34,22 +34,20 @@
 </template>
 
 <script setup>
-import { ref, onMounted} from "vue";
+import { ref, inject} from "vue";
 import Dialog from "primevue/dialog";
 import InputText from "primevue/inputtext";
 import Button from "primevue/button";
 import router from "@/router";
- import { io } from "socket.io-client";
+//  import { io } from "socket.io-client";
 
 //Variable for the modal dialog
 const visible = ref(true);
 const inputValue = ref("");
 //Define emits
-const emit = defineEmits("userName");
-let socket;
-onMounted(()=>{
-socket = io('http://localhost:3000')
-})
+const emit = defineEmits(["userName", "visibleModalDialog"]);
+const socket = inject('socket')
+
 
 
 function handleConfirmButton() {
@@ -58,13 +56,16 @@ function handleConfirmButton() {
   } else {
     //Emit to the parent component
     emit("userName", inputValue.value);
+    visible.value = false;
+    emit("visibleModalDialog", visible.value)
     //Emit to the server
     socket.emit("joinning message", inputValue.value)
-    visible.value = false;
+    
   }
 }
 
 function goBackToPreviousPage() {
+  socket.disconnect();
   router.go(-1);
 }
 
